@@ -14,6 +14,18 @@
     <div>
         <h3>Browse Topics</h3>
         <hr>
+
+        <div>
+            <a href="{% url 'home' %}">Remove Topic Filter</a>
+            <br><br>
+        </div>
+
+        {% for topic in topics %}
+            <div>
+                <a href="{% url 'home' %}?q={{topic.name}}"> {{topic.name}} </a>
+            </div>
+        {% endfor %}
+
     </div>
     
 
