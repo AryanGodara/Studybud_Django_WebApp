@@ -5,11 +5,6 @@ from .models import Room
 
 # Create your views here.
 
-rooms = [
-    {'id': 1, 'name': 'Lets Learn Python'},
-    {'id': 2, 'name': 'Design with me'},
-    {'id': 3, 'name': 'Fronted Developer'},
-]
 
 def home(request):
     rooms = Room.objects.all()
