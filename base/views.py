@@ -34,6 +34,12 @@ def loginPage(request):
     return render(request, 'base/login_register.html', context)
 
 
+def logoutUser(request):
+    logout(request)
+        #? This "logout taking in 'request' " will delete the sessionid token, thereby logging out the user
+    return redirect('home')
+
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
             # Returns the 'query: topic name' after ?q in the URL
