@@ -39,7 +39,12 @@ def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)   #? So that the form is pre-filled with the current values
     
-    
+    if request.method == 'POST':
+        form = RoomForm(request.POST, instance=room)
+            #? If we don't specify instance=room, it'll create a NEW room, instead of updating the values of the correct room
+        if form.is_valid():
+            form.save()
+            return redirect('home')
     
     context = {'form':form}
     return render(request, 'base/room_form.html', context)
