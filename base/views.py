@@ -1,5 +1,5 @@
 from multiprocessing import context
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import Room
 from .forms import RoomForm
@@ -20,5 +20,14 @@ def room(request,pk):
 
 def createRoom(request):
     form = RoomForm()
+    
+    if request.method == 'POST':
+        # print(request.POST)     #? request.POST is the 'query/list' containg the form data filled by the user
+        form = RoomForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('home') # We can enter 'home' instead of absolute path, because of name="home" in urls.py
+    
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
