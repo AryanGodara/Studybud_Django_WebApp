@@ -1,5 +1,12 @@
-<a href="/">            {% comment %} href = base directory ie, home.html {% endcomment %}
+<a href="{% url 'home' %}">            {% comment %} href = base directory ie, home.html {% endcomment %}
     <h1>Logo</h1>
 </a>
+
+<form action="{% url 'home' %}" method="get">
+    <input type="text" name="q" placeholder="search...">
+    {% comment "why q?" %}
+        name=q, appends  :- ?q='value added in search field' to the URL, allowing us to search
+    {% endcomment %}
+</form>
 
 <hr>
