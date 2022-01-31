@@ -1,4 +1,5 @@
 from multiprocessing import context
+from webbrowser import get
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
@@ -9,7 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 
 
-from .models import Room, Topic
+from .models import Room, Topic, Message
 from .forms import RoomForm
 
 # Create your views here.
@@ -94,7 +95,21 @@ def home(request):
 def room(request,pk):
     room = Room.objects.get(id=pk)
 
-    context = {'room': room}
+    room_messages = room.message_set.all().order_by('-created')
+    
+    participants = room.participants.all()
+    
+    if request.method == 'POST':
+        message = Message.objects.create(   # Fill in the three required fields for a message model
+            user = request.user,
+            room = room,     # room variable is defined above
+            body = request.POST.get('body')     # name="body" for the input field in the template
+        )
+        
+        room.participants.add(request.user)
+        return redirect('room', pk=room.id)     #? We want the page to fully reload after the POST request, to avoid any unknown errors
+
+    context = {'room': room, 'room_messages': room_messages, 'participants': participants}
     return render(request, 'base/room.html', context)
 
 
@@ -145,3 +160,17 @@ def deleteRoom(request, pk):
         return redirect('home')
     
     return render(request, 'base/delete.html', {'obj':room})
+
+
+@login_required(login_url='login')
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+    
+    if request.user != message.user:
+        return HttpResponse('You are not allowed here!!!')
+    
+    if request.method == 'POST':
+        message.delete()
+        return redirect('home')
+    
+    return render(request, 'base/delete.html', {'obj':message})

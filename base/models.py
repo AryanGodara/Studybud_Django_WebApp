@@ -19,7 +19,8 @@ class Room(models.Model):
         # The topic of conversation inside the room
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    # participants =    Stores all the users that are currently active in the room
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)
+        # Stores all the users that are currently active in the room
     updated = models.DateTimeField(auto_now=True)       # Updated on every updation
     created = models.DateTimeField(auto_now_add=True)   # Only updated when created
     
