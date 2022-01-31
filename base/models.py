@@ -40,5 +40,8 @@ class Message(models.Model):
     updated = models.DateTimeField(auto_now=True)       # Updated on every updation
     created = models.DateTimeField(auto_now_add=True)   # Only updated when created
     
+    class Meta:
+        ordering = ['-updated', '-created']
+    
     def __str__(self):
         return self.body[0:50]     #* Only the first 50 characters in the preview of message
