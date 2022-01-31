@@ -136,17 +136,29 @@ def userProfile(request,pk):
 def createRoom(request):
     form = RoomForm()
     
+    topics = Topic.objects.all()
+    
     if request.method == 'POST':
         # print(request.POST)     #? request.POST is the 'query/list' containg the form data filled by the user
-        form = RoomForm(request.POST)
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        # form = RoomForm(request.POST)
         
-        if form.is_valid():
-            room = form.save(commit=False)
-            room.host = request.user    #? The host should be added automatically, depending on which user created the room
-            room.save()
-            return redirect('home') # We can enter 'home' instead of absolute path, because of name="home" in urls.py
+        Room.objects.create(
+            host=request.user,
+            topic = topic,
+            name = request.POST.get('name'),
+            description = request.POST.get('description'),
+        )
+        return redirect('home')
     
-    context = {'form': form}
+        # if form.is_valid():
+        #     room = form.save(commit=False)
+        #     room.host = request.user    #? The host should be added automatically, depending on which user created the room
+        #     room.save()
+        #     return redirect('home') # We can enter 'home' instead of absolute path, because of name="home" in urls.py
+    
+    context = {'form': form, 'topics': topics}
     return render(request, 'base/room_form.html', context)
 
 
@@ -154,18 +166,28 @@ def createRoom(request):
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)   #? So that the form is pre-filled with the current values
+    topics = Topic.objects.all()
     
     if request.user != room.host:
         return HttpResponse('You are not allowed here!!!')
     
     if request.method == 'POST':
-        form = RoomForm(request.POST, instance=room)
-            #? If we don't specify instance=room, it'll create a NEW room, instead of updating the values of the correct room
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        
+        room.name = request.POST.get('name')
+        room.topic = topic
+        room.description = request.POST.get('description')
+        room.save()
+        return redirect('home')
+        
+        # form = RoomForm(request.POST, instance=room)
+        #     #? If we don't specify instance=room, it'll create a NEW room, instead of updating the values of the correct room
+        # if form.is_valid():
+        #     form.save()
+        #     return redirect('home')
     
-    context = {'form':form}
+    context = {'form':form, 'topics': topics, 'room': room}
     return render(request, 'base/room_form.html', context)
 
 
