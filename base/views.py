@@ -141,7 +141,9 @@ def createRoom(request):
         form = RoomForm(request.POST)
         
         if form.is_valid():
-            form.save()
+            room = form.save(commit=False)
+            room.host = request.user    #? The host should be added automatically, depending on which user created the room
+            room.save()
             return redirect('home') # We can enter 'home' instead of absolute path, because of name="home" in urls.py
     
     context = {'form': form}
