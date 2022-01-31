@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'base.apps.BaseConfig', # Go to the exact path inside the base directory, to the class 'BaseConfig'
+    
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
