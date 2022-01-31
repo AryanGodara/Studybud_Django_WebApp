@@ -41,10 +41,15 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig', # Go to the exact path inside the base directory, to the class 'BaseConfig'
     
     'rest_framework',
+    
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    "corsheaders.middleware.CorsMiddleware",
+    
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
