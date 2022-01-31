@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls')),     # Send the user to 'base/urls.py' to look further
+    path('api/', include('base.api.urls')), # Send the user to the api section
 ]
