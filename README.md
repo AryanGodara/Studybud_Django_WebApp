@@ -6,7 +6,7 @@
 
 # studybud_django
 This is a Django Web App Project.
-A working link for this website (Not hoisted by me, owner is Dennis Ivy) :-
+A working link for this website (Not hosted by me, owner is Dennis Ivy) :-
 https://studybuddev.herokuapp.com/
 
 ### App Preview :
